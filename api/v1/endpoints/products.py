@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 from schemas.product import ProductoCreate
 from core.database import productos_collection
 from pymongo.errors import PyMongoError
+from bson import ObjectId
 
 router = APIRouter(
     prefix="/productos",
@@ -43,4 +44,27 @@ def listar_productos():
         raise HTTPException(
             status_code=500,
             detail="Error al listar los productos"
+        )        
+@router.get("/{producto_id}")
+def obtener_producto(producto_id: str):
+
+    try:
+        producto = productos_collection.find_one(
+            {"_id": ObjectId(producto_id)}
+        )
+
+        if not producto:
+            raise HTTPException(
+                status_code=404,
+                detail="Producto no encontrado"
+            )
+
+        producto["_id"] = str(producto["_id"])
+
+        return producto
+
+    except PyMongoError:
+        raise HTTPException(
+            status_code=500,
+            detail="Error al consultar el producto"
         )        
