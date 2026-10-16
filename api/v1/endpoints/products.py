@@ -186,7 +186,6 @@ def filtrar_por_precio(precio: float):
         )
 @router.get("/filtrar/disponibles")
 def filtrar_disponibles():
-
     try:
         productos = list(
             productos_collection.find(
@@ -203,4 +202,23 @@ def filtrar_disponibles():
         raise HTTPException(
             status_code=500,
             detail="Error al filtrar productos disponibles"
-        )        
+        )
+@router.get("/buscar/ingrediente/{ingrediente}")
+def buscar_por_ingrediente(ingrediente: str):
+    try:
+        productos = list(
+            productos_collection.find(
+                {"ingredientes": {"$regex": ingrediente, "$options": "i"}}
+            )
+        )
+
+        for producto in productos:
+            producto["_id"] = str(producto["_id"])
+
+        return productos
+
+    except PyMongoError:
+        raise HTTPException(
+            status_code=500,
+            detail="Error al buscar productos por ingrediente"
+        )
