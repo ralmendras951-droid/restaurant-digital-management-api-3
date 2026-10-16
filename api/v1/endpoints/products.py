@@ -184,10 +184,8 @@ def filtrar_por_precio(precio: float):
             status_code=500,
             detail="Error al filtrar productos por precio"
         )
-        
 @router.get("/filtrar/disponibles")
 def filtrar_disponibles():
-
     try:
         productos = list(
             productos_collection.find(
@@ -204,10 +202,9 @@ def filtrar_disponibles():
         raise HTTPException(
             status_code=500,
             detail="Error al filtrar productos disponibles"
-        )       
+        )
 @router.get("/buscar/ingrediente/{ingrediente}")
 def buscar_por_ingrediente(ingrediente: str):
-
     try:
         productos = list(
             productos_collection.find(
@@ -224,4 +221,4 @@ def buscar_por_ingrediente(ingrediente: str):
         raise HTTPException(
             status_code=500,
             detail="Error al buscar productos por ingrediente"
-        )        
+        )
