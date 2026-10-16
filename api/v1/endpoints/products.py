@@ -19,7 +19,8 @@ def registrar_producto(producto: ProductoCreate):
 
         return {
             "mensaje": "Producto registrado correctamente",
-            "id": str(resultado.inserted_id)
+            "id": str(resultado.inserted_id),
+            "nombre": producto.nombre
         }
 
     except PyMongoError:
