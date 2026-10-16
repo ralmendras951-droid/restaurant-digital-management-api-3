@@ -139,4 +139,24 @@ def buscar_por_nombre(nombre: str):
         raise HTTPException(
             status_code=500,
             detail="Error al buscar productos por nombre"
-        )        
+        )   
+@router.get("/filtrar/categoria/{categoria}")
+def filtrar_por_categoria(categoria: str):
+
+    try:
+        productos = list(
+            productos_collection.find(
+                {"categoria": {"$regex": f"^{categoria}$", "$options": "i"}}
+            )
+        )
+
+        for producto in productos:
+            producto["_id"] = str(producto["_id"])
+
+        return productos
+
+    except PyMongoError:
+        raise HTTPException(
+            status_code=500,
+            detail="Error al filtrar productos por categoría"
+        )            
