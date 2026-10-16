@@ -28,3 +28,19 @@ def registrar_producto(producto: ProductoCreate):
             status_code=500,
             detail="Error al registrar el producto"
         )
+@router.get("/")
+def listar_productos():
+
+    try:
+        productos = list(productos_collection.find())
+
+        for producto in productos:
+            producto["_id"] = str(producto["_id"])
+
+        return productos
+
+    except PyMongoError:
+        raise HTTPException(
+            status_code=500,
+            detail="Error al listar los productos"
+        )        
