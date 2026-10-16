@@ -96,3 +96,27 @@ def actualizar_producto(producto_id: str, producto: ProductoCreate):
             status_code=500,
             detail="Error al actualizar el producto"
         )              
+@router.delete("/{producto_id}")
+def eliminar_producto(producto_id: str):
+
+    try:
+        resultado = productos_collection.delete_one(
+            {"_id": ObjectId(producto_id)}
+        )
+
+        if resultado.deleted_count == 0:
+            raise HTTPException(
+                status_code=404,
+                detail="Producto no encontrado"
+            )
+
+        return {
+            "mensaje": "Producto eliminado correctamente",
+            "id": producto_id
+        }
+
+    except PyMongoError:
+        raise HTTPException(
+            status_code=500,
+            detail="Error al eliminar el producto"
+        )
