@@ -140,7 +140,7 @@ def buscar_por_nombre(nombre: str):
             status_code=500,
             detail="Error al buscar productos por nombre"
         )
-        )
+        
 
 @router.get("/filtrar/categoria/{categoria}")
 def filtrar_por_categoria(categoria: str):
