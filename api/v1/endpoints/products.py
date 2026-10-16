@@ -120,3 +120,23 @@ def eliminar_producto(producto_id: str):
             status_code=500,
             detail="Error al eliminar el producto"
         )
+@router.get("/buscar/nombre/{nombre}")
+def buscar_por_nombre(nombre: str):
+
+    try:
+        productos = list(
+            productos_collection.find(
+                {"nombre": {"$regex": nombre, "$options": "i"}}
+            )
+        )
+
+        for producto in productos:
+            producto["_id"] = str(producto["_id"])
+
+        return productos
+
+    except PyMongoError:
+        raise HTTPException(
+            status_code=500,
+            detail="Error al buscar productos por nombre"
+        )        
