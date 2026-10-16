@@ -67,4 +67,32 @@ def obtener_producto(producto_id: str):
         raise HTTPException(
             status_code=500,
             detail="Error al consultar el producto"
-        )        
+        )  
+@router.put("/{producto_id}")
+def actualizar_producto(producto_id: str, producto: ProductoCreate):
+
+    try:
+        producto_data = producto.model_dump()
+
+        resultado = productos_collection.update_one(
+            {"_id": ObjectId(producto_id)},
+            {"$set": producto_data}
+        )
+
+        if resultado.matched_count == 0:
+            raise HTTPException(
+                status_code=404,
+                detail="Producto no encontrado"
+            )
+
+        return {
+            "mensaje": "Producto actualizado correctamente",
+            "id": producto_id,
+            "nombre": producto.nombre
+        }
+
+    except PyMongoError:
+        raise HTTPException(
+            status_code=500,
+            detail="Error al actualizar el producto"
+        )              
